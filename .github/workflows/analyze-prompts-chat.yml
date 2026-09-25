@@ -19,6 +19,12 @@ jobs:
         run: python3 -m pip install --disable-pip-version-check --no-cache-dir openpyxl
       - name: Run dataset analysis and build Excel
         run: python3 scripts/analyze-prompts-chat.py
+      - name: Upload Excel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: prompts-chat-excel
+          path: reports/prompts-chat-prompt-katalogu.xlsx
+
       - name: Commit analysis report and Excel
         run: |
           git config user.name "github-actions[bot]"
