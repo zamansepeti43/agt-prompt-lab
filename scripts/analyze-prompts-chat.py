@@ -13,7 +13,7 @@ def get(url):
 
 def clean_excel(s):
     s = str(s or "")
-    return re.sub(r"[\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f]", "", s)
+    return "".join(ch for ch in s if ord(ch) >= 32 or ch in "\\t\\n\\r")
 
 def norm(s):
     s = unicodedata.normalize("NFKC", s or "").lower()
