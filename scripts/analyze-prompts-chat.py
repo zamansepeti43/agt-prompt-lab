@@ -11,6 +11,10 @@ def get(url):
     with urllib.request.urlopen(req, timeout=120) as r:
         return r.read()
 
+def clean_excel(s):
+    s = str(s or "")
+    return re.sub(r"[\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f]", "", s)
+
 def norm(s):
     s = unicodedata.normalize("NFKC", s or "").lower()
     return re.sub(r"\s+", " ", s).strip()
@@ -211,10 +215,10 @@ for i, r in enumerate(rows, start=1):
         independent = "Belirtilmemiş"
     row_id = r.get(id_f) or i
     ws.append([
-        row_id, title, category, tags, content,
-        category, model_display, ", ".join(sorted(provs)),
-        independent, (r.get(type_f) or "") if type_f else "",
-        ", ".join(vars_found), len(content.split()), quality, dup,
+        clean_excel(row_id), clean_excel(title), clean_excel(category), clean_excel(tags), clean_excel(content),
+        clean_excel(category), clean_excel(model_display), clean_excel(", ".join(sorted(provs))),
+        clean_excel(independent), clean_excel((r.get(type_f) or "") if type_f else ""),
+        clean_excel(", ".join(vars_found)), len(content.split()), clean_excel(quality), clean_excel(dup),
         "prompts.chat / prompts.csv", "CC0 1.0"
     ])
 
