@@ -1,0 +1,39 @@
+name: Sync prompts.chat
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout our repository
+        uses: actions/checkout@v4
+
+      - name: Clone prompts.chat
+        run: |
+          git clone --depth 1 https://github.com/f/prompts.chat.git /tmp/prompts-chat
+
+      - name: Copy upstream repository
+        run: |
+          rm -rf source/prompts.chat
+          mkdir -p source
+          cp -a /tmp/prompts-chat source/prompts.chat
+          rm -rf source/prompts.chat/.git
+
+      - name: Commit upstream snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add source/prompts.chat
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "sync: import latest prompts.chat snapshot"
+            git push
+          fi
