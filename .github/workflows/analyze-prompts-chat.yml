@@ -31,4 +31,4 @@ jobs:
             git push
           fi
 
-# analysis retry
+# build real Excel from synced prompts.chat source
