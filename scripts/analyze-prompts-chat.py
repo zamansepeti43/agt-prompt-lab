@@ -36,6 +36,7 @@ def find_field(fields, names):
 print("Downloading CSV...")
 raw = get(CSV_URL)
 print(f"Downloaded {len(raw):,} bytes")
+csv.field_size_limit(20 * 1024 * 1024)
 text = raw.decode("utf-8-sig", errors="replace")
 reader = csv.DictReader(io.StringIO(text))
 rows = list(reader)
